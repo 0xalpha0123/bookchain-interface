@@ -33,6 +33,7 @@ class App extends Component {
           <h2>Bookchain</h2>
         </div>
         <div className="App-intro">
+          <br/>
           <section>
             This should return the availability state of our contract living on
             the local blockchain >> `{ this.state.isAvailable }` this should be true/false
