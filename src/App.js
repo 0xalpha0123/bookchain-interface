@@ -1,6 +1,4 @@
-import React, {
-  Component
-} from 'react';
+import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import BookForm from './BookForm.js';
@@ -15,7 +13,7 @@ class App extends Component {
     this.state = {
       isAvailable: [],
       owner: [],
-      testBook: [],
+      testBook: "",
       books: [{
           title: "Don Quixote",
           author: "Miguel de Cervantes",
@@ -54,28 +52,29 @@ class App extends Component {
     });
   }
 
-  componentDidMount() {
-    var x = this.getBookData();
-    debugger;
-  }
 
   getBookData() {
     let bookIsbn = "0316067598";
-    const url = "https://www.googleapis.com/books/v1/volumes?q=isbn" +
-      bookIsbn;
-    var currentThis = this;
+    const url = "https://www.googleapis.com/books/v1/volumes?q=isbn" + bookIsbn;
+    var self = this;
 
     request
       .get(url)
       .end((err, res) => {
         var bookData = res.body.items[0].volumeInfo;
-        // return currentThis.setState({
-          // testBook: bookData
-        // });
-        return bookData;
+        var parsedData = JSON.stringify(bookData);
+        debugger;
+        self.setState({
+          testBook: parsedData
+        });
+        debugger;
       });
   }
 
+  componentDidMount() {
+    this.getBookData();
+    debugger;
+  }
   render() {
     return (
       <div className="App">
