@@ -5,7 +5,7 @@ import App from '../src/App'
 
 const wrapper = shallow(<App/>);
 
-describe('(Component) MyComponent', () => {
+describe('(Component) App', () => {
   it('renders without exploding', () => {
     expect(wrapper).to.have.length(1);
   });

@@ -51,7 +51,7 @@ class App extends Component {
     return (
       <div className="App">
         <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
+          <img src={logo} className="svg-logo" alt="logo" />
           <h2>Bookchain</h2>
         </div>
         <div className="App-intro">
