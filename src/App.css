@@ -7,6 +7,19 @@
   height: 100px;
 }
 
+.slide-show {
+  height: 12em;
+  padding: 5em;
+  background-color: grey;
+}
+
+.book-slide {
+  width: 10em;
+  height: 15em;
+  color: black;
+  background-color: white;
+}
+
 .App-header {
   background-color: #ffca4f;
   height: 150px;

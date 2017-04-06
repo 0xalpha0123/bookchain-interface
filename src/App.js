@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
-import BookForm from './BookForm.js'
+import BookForm from './BookForm.js';
+import Carousel from './Carousel';
 import bookContract from './ethereum/EthereumClient';
 
 class App extends Component {
@@ -27,6 +28,7 @@ class App extends Component {
           <h2>Bookchain</h2>
         </div>
         <div className="App-intro">
+          <div className="slide-show"><Carousel /></div>
           <br/>
           <section>
             This should return the availability state of our contract living on
