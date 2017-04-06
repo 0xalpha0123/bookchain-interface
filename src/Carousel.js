@@ -12,13 +12,15 @@ class Carousel extends Component {
       slidesToShow: 1,
       slidesToScroll: 1
     };
+    const slideShow = this.props.books.map((book) => 
+      <div className="book-slide">
+        <h3>{book.title}</h3>
+        <h4>by: {book.author}</h4>
+      </div>
+    )
     return (
       <Slider {...settings}>
-        <div className="book-slide"><h3>1</h3></div>
-        <div className="book-slide"><h3>2</h3></div>
-        <div className="book-slide"><h3>3</h3></div>
-        <div className="book-slide"><h3>4</h3></div>
-        <div className="book-slide"><h3>5</h3></div>
+        {slideShow}
       </Slider>
     );
   }

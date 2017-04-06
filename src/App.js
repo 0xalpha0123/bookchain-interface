@@ -10,7 +10,34 @@ class App extends Component {
     super(props)
     this.state = {
       isAvailable: [],
-      owner: []
+      owner: [],
+      books: [
+        {
+          title: "Don Quixote",
+          author: "Miguel de Cervantes",
+          isdn: "1"
+        },
+         {
+          title: "Ulysses",
+          author: "James Joyce",
+          isdn: "2"
+        },
+         {
+          title: "The Odyssey",
+          author: "Homer",
+          isdn: "3"
+        },
+         {
+          title: "Don Quixote",
+          author: "Miguel de Cervantes",
+          isdn: "4"
+        },
+         {
+          title: "Moby Dick",
+          author: "Herman Melville",
+          isdn: "5"
+        },
+      ]
     }
   }
   componentWillMount() {
@@ -28,7 +55,9 @@ class App extends Component {
           <h2>Bookchain</h2>
         </div>
         <div className="App-intro">
-          <div className="slide-show"><Carousel /></div>
+          <div className="slide-show">
+            <Carousel books={this.state.books} />
+          </div>
           <br/>
           <section>
             This should return the availability state of our contract living on
