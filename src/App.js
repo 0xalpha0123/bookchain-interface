@@ -114,6 +114,22 @@ class App extends Component {
   componentWillMount() {
     let data = bookContract;
     let bookIsbn = "0316067598";
+    const url = "https://www.googleapis.com/books/v1/volumes?q=isbn" +
+      bookIsbn;
+
+    fetch(url)
+      .then(function(response) {
+        if (response.status >= 400) {
+          throw new Error("Bad response from server");
+        }
+        return response.json();
+      })
+      .then(function(data) {
+        this.setState({
+          book: data.items[0]
+        });
+      }).done();
+    debugger;
     this.setState({
       isAvailable: String(data.isAvailable()),
       owner: String(data.owner())
@@ -131,9 +147,8 @@ class App extends Component {
 
   getBookData() {
     let bookIsbn = "0316067598";
-    const url = "https://www.googleapis.com/books/v1/volumes?q=isbn" + bookIsbn;
-    var x = HTTP.get(url);
-    debugger;
+    const url = "https://www.googleapis.com/books/v1/volumes?q=isbn" +
+      bookIsbn;
 
     fetch(url)
       .then(function(response) {
@@ -143,7 +158,11 @@ class App extends Component {
         return response.json();
       })
       .then(function(data) {
-      return    <div className="content">{data.items[0]}</div>
+        this.setState({
+          book: data.items[0]
+        });
+        var bookData = data.items[0];
+        debugger;
       });
   }
 
