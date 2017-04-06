@@ -14,15 +14,14 @@ class App extends Component {
     super(props)
     this.state = {
       isAvailable: [],
-      owner: [],
+      owner: []
     }
   }
   componentWillMount() {
     let data = bookContract
     this.setState({
       isAvailable: String(data.isAvailable()),
-      owner: String(data.owner()),
-
+      owner: String(data.owner())
     })
   }
   render() {
