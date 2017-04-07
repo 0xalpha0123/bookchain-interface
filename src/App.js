@@ -45,13 +45,22 @@ class App extends Component {
 
   componentWillMount() {
     let data = bookContract;
-
+    this.getBookData();
     this.setState({
       isAvailable: String(data.isAvailable()),
       owner: String(data.owner())
     });
   }
 
+  addBook(book) {
+      this.setState({
+        books: this.state.books.concat({
+          title: book.title,
+          author: book.authors[0],
+          isdn: 6
+        })
+      })
+  }
 
   getBookData() {
     let bookIsbn = "0316067598";
@@ -63,17 +72,8 @@ class App extends Component {
       .end((err, res) => {
         var bookData = res.body.items[0].volumeInfo;
         var parsedData = JSON.stringify(bookData);
-        debugger;
-        self.setState({
-          testBook: parsedData
-        });
-        debugger;
+        self.addBook(bookData)
       });
-  }
-
-  componentDidMount() {
-    this.getBookData();
-    debugger;
   }
   render() {
     return (
@@ -94,7 +94,6 @@ class App extends Component {
           <br/>
           <section>
             ...AND this should be a crazy blockchain address for the contract owner.. { this.state.owner }
-            { this.state.testBook }
           <p>{this.state.testBook.title}</p>
           </section>
           <BookForm name='name' />
