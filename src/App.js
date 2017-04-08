@@ -30,8 +30,8 @@ class App extends Component {
           isdn: "3"
         },
         {
-          title: "Don Quixote",
-          author: "Miguel de Cervantes",
+          title: "Not Don Quixote",
+          author: "Not Miguel de Cervantes",
           isdn: "4"
         },
         {
@@ -79,7 +79,7 @@ class App extends Component {
     return (
       <div className="App">
         <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
+          <img src={logo} className="svg-logo" alt="logo" />
           <h2>Bookchain</h2>
         </div>
         <div className="App-intro">
