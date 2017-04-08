@@ -21,7 +21,7 @@ import React from 'react';
       return (
         <form onSubmit={this.handleSubmit}>
           <br/>
-          <label>
+          <label tabIndex="0">
             Find by Book {this.props.name}:
             <input type="name" value={this.state.value} onChange={this.handleChange} />
           </label>

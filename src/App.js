@@ -64,14 +64,14 @@ class App extends Component {
 
   getBookData() {
     let bookIsbn = "0316067598";
-    const url = "https://www.googleapis.com/books/v1/volumes?q=isbn" + bookIsbn;
+    const url = `https://www.googleapis.com/books/v1/volumes?q=isbn${bookIsbn}`;
     var self = this;
 
     request
       .get(url)
       .end((err, res) => {
         var bookData = res.body.items[0].volumeInfo;
-        var parsedData = JSON.stringify(bookData);
+        // var parsedData = JSON.stringify(bookData);
         self.addBook(bookData)
       });
   }

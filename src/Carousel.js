@@ -17,7 +17,7 @@ class Carousel extends Component {
         className="book-slide"
         key={book.isdn}
         >
-        <h3>{book.title}</h3>
+        <h3 tabIndex="0">{book.title}</h3>
         <h4>by: {book.author}</h4>
       </div>
     )
