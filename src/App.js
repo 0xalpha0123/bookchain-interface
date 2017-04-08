@@ -4,48 +4,76 @@ import './App.css';
 import BookForm from './BookForm.js';
 import Carousel from './Carousel';
 import bookContract from './ethereum/EthereumClient';
+const request = require('superagent');
+const bookContractAddress = '0x468a2507dd1d438c42160390d3d7a8d47bec8765';
 
 class App extends Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       isAvailable: [],
       owner: [],
-      books: [
-        {
+      testBook: "",
+      books: [{
           title: "Don Quixote",
           author: "Miguel de Cervantes",
           isdn: "1"
         },
-         {
+        {
           title: "Ulysses",
           author: "James Joyce",
           isdn: "2"
         },
-         {
+        {
           title: "The Odyssey",
           author: "Homer",
           isdn: "3"
         },
-         {
+        {
           title: "Not Don Quixote",
           author: "Not Miguel de Cervantes",
           isdn: "4"
         },
-         {
+        {
           title: "Moby Dick",
           author: "Herman Melville",
           isdn: "5"
         },
       ]
-    }
+    };
   }
+
   componentWillMount() {
-    let data = bookContract
+    let data = bookContract;
+    this.getBookData();
     this.setState({
       isAvailable: String(data.isAvailable()),
       owner: String(data.owner())
-    })
+    });
+  }
+
+  addBook(book) {
+      this.setState({
+        books: this.state.books.concat({
+          title: book.title,
+          author: book.authors[0],
+          isdn: 6
+        })
+      })
+  }
+
+  getBookData() {
+    let bookIsbn = "0316067598";
+    const url = `https://www.googleapis.com/books/v1/volumes?q=isbn${bookIsbn}`;
+    var self = this;
+
+    request
+      .get(url)
+      .end((err, res) => {
+        var bookData = res.body.items[0].volumeInfo;
+        // var parsedData = JSON.stringify(bookData);
+        self.addBook(bookData)
+      });
   }
   render() {
     return (
@@ -66,6 +94,7 @@ class App extends Component {
           <br/>
           <section>
             ...AND this should be a crazy blockchain address for the contract owner.. { this.state.owner }
+          <p>{this.state.testBook.title}</p>
           </section>
           <BookForm name='name' />
           <BookForm name='author' />
