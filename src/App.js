@@ -3,7 +3,7 @@ import logo from './logo.svg';
 import './App.css';
 import BookForm from './BookForm.js';
 import Carousel from './Carousel';
-import bookContract from './ethereum/EthereumClient';
+import {bookContract, bookChainContract} from './ethereum/EthereumClient';
 const request = require('superagent');
 const bookContractAddress = '0x468a2507dd1d438c42160390d3d7a8d47bec8765';
 
@@ -53,6 +53,7 @@ class App extends Component {
   }
 
   addBook(book) {
+      console.log(book)        
       this.setState({
         books: this.state.books.concat({
           title: book.title,
@@ -90,6 +91,9 @@ class App extends Component {
           <section>
             This should return the availability state of our contract living on
             the local blockchain >> `{ this.state.isAvailable }` this should be true/false
+          </section>
+          <section>
+            this is the book chain address = {bookChainContract.address}
           </section>
           <br/>
           <section>
