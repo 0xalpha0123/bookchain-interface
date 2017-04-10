@@ -19,6 +19,7 @@ class Carousel extends Component {
         >
         <h3 tabIndex="0">{book.title}</h3>
         <h4>by: {book.author}</h4>
+        isdn:{book.isdn}
       </div>
     )
     return (
