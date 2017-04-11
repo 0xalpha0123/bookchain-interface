@@ -7,6 +7,7 @@ import _ from 'lodash'
 import {bookContract, bookChainContract, accounts} from './ethereum/EthereumClient'
 import request from 'superagent'
 
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -32,6 +33,7 @@ class App extends Component {
   }
   
   addBook(book) {
+      console.log(book)        
       this.setState({
         books: this.state.books.concat({
           title: book.title,
@@ -47,7 +49,6 @@ class App extends Component {
     const url = `https://www.googleapis.com/books/v1/volumes?q=isbn${bookIsbn}`;
 
     request.get(url).then((res) => {
-      // console.log(_.first(res.body.items))
       let bookData = _.first(res.body.items).volumeInfo
       this.addBookToBookchain(bookIsbn, bookData)
     }).catch((err) => alert(`You hit a problem ${err}`))
@@ -55,7 +56,7 @@ class App extends Component {
 
   componentWillMount() {
     let data = bookContract;
-    // this.getBookData("0316067598");
+    // this.getBookData("0316067598"); These can be used as inputs to test
     // this.getBookData("9780060830939");
     
     this.setState({
@@ -94,5 +95,4 @@ class App extends Component {
     );
   }
 }
-// 9783161484100
 export default App;
