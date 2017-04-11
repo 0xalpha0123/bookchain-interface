@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Slider from 'react-slick';
+import _ from 'lodash'
 import '../css/Carousel.css'
 
 
@@ -26,7 +27,7 @@ class Carousel extends Component {
             <img src={book.img_url} alt="Not Found"/>
           </div>
           <div className="col">
-            {book.desc} 
+            {_.take(book.desc, 700)}... 
           </div>
         </div>
         <br/>
