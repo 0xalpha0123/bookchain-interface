@@ -15,11 +15,13 @@ class Carousel extends Component {
     const slideShow = this.props.books.map((book) => 
       <div 
         className="book-slide"
-        key={book.isdn}
+        key={book.id}
         >
         <h3 tabIndex="0">{book.title}</h3>
+        <img src={book.img_url} alt="Image Not Found"/>
         <h4>by: {book.author}</h4>
-        isdn:{book.isdn}
+        <br/>
+        id:{book.id}
       </div>
     )
     return (

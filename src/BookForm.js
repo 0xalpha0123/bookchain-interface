@@ -13,8 +13,8 @@ import React from 'react';
     }
 
     handleSubmit(event) {
-      alert('A name was submitted: ' + this.state.value);
       event.preventDefault();
+      this.props.getBookData(this.state.value)
     }
 
     render() {
@@ -22,7 +22,7 @@ import React from 'react';
         <form onSubmit={this.handleSubmit}>
           <br/>
           <label tabIndex="0">
-            Find by Book {this.props.name}:
+            Add a book by isbn: 
             <input type="name" value={this.state.value} onChange={this.handleChange} />
           </label>
           <input type="submit" value="Submit" />

@@ -1,11 +1,12 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
-import BookForm from './BookForm.js';
-import Carousel from './Carousel';
-import {bookContract, bookChainContract} from './ethereum/EthereumClient';
-const request = require('superagent');
-const bookContractAddress = '0x468a2507dd1d438c42160390d3d7a8d47bec8765';
+import React, { Component } from 'react'
+import logo from './logo.svg'
+import './App.css'
+import BookForm from './BookForm.js'
+import Carousel from './Carousel'
+import _ from 'lodash'
+import {bookContract, bookChainContract, accounts} from './ethereum/EthereumClient'
+import request from 'superagent'
+
 
 class App extends Component {
   constructor(props) {
@@ -13,69 +14,58 @@ class App extends Component {
     this.state = {
       isAvailable: [],
       owner: [],
-      testBook: "",
-      books: [{
+      books: [
+        {
           title: "Don Quixote",
           author: "Miguel de Cervantes",
-          isdn: "1"
-        },
-        {
-          title: "Ulysses",
-          author: "James Joyce",
-          isdn: "2"
-        },
-        {
-          title: "The Odyssey",
-          author: "Homer",
-          isdn: "3"
-        },
-        {
-          title: "Not Don Quixote",
-          author: "Not Miguel de Cervantes",
-          isdn: "4"
-        },
-        {
-          title: "Moby Dick",
-          author: "Herman Melville",
-          isdn: "5"
-        },
+          desc: "Test book!",
+          id: "Test1"
+        }
       ]
     };
+    this.addBook = this.addBook.bind(this);
+    this.addBookToBookchain = this.addBookToBookchain.bind(this);
   }
 
-  componentWillMount() {
-    let data = bookContract;
-    this.getBookData();
-    this.setState({
-      isAvailable: String(data.isAvailable()),
-      owner: String(data.owner())
-    });
+  addBookToBookchain(isbn, bookData) {
+    bookChainContract.createBook(isbn, {from: accounts[0]})
+    this.addBook(bookData)
   }
-
+  
   addBook(book) {
       console.log(book)        
       this.setState({
         books: this.state.books.concat({
           title: book.title,
           author: book.authors[0],
-          isdn: 6
+          id: book.industryIdentifiers[0].identifier,
+          desc: book.description,
+          // img_url: book.imageLinks.smallThumbnail
         })
       })
-  }
+  };
 
-  getBookData() {
-    let bookIsbn = "0316067598";
+  getBookData = (bookIsbn) => {
     const url = `https://www.googleapis.com/books/v1/volumes?q=isbn${bookIsbn}`;
-    var self = this;
 
-    request
-      .get(url)
-      .end((err, res) => {
-        var bookData = res.body.items[0].volumeInfo;
-        // var parsedData = JSON.stringify(bookData);
-        self.addBook(bookData)
-      });
+    request.get(url).then((res) => {
+      let bookData = _.first(res.body.items).volumeInfo
+      this.addBookToBookchain(bookIsbn, bookData)
+    }).catch((err) => alert(`You hit a problem ${err}`))
   }
+
+  componentWillMount() {
+    let data = bookContract;
+    // this.getBookData("0316067598"); These can be used as inputs to test
+    // this.getBookData("9780060830939");
+    
+    this.setState({
+      isAvailable: String(data.isAvailable()),
+      owner: String(data.owner())
+    });
+  }
+
+
   render() {
     return (
       <div className="App">
@@ -98,15 +88,11 @@ class App extends Component {
           <br/>
           <section>
             ...AND this should be a crazy blockchain address for the contract owner.. { this.state.owner }
-          <p>{this.state.testBook.title}</p>
           </section>
-          <BookForm name='name' />
-          <BookForm name='author' />
-          <BookForm name='isdn' />
+          <BookForm getBookData={this.getBookData} />
         </div>
       </div>
     );
   }
 }
-
 export default App;

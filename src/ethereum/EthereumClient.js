@@ -318,14 +318,14 @@ const bookChainContractABI = [
   ]
 
 const bookContractAddress = '0x929bbbf2701f2d7b9ceed38153f47b3701372b50'
-
 const bookChainContractAddress = '0x02bba5f902fd61b111b15f7f622b61a70bf2a265'
 
 const bookChainContract = ETHEREUM_CLIENT.eth.contract(bookChainContractABI).at(bookChainContractAddress)
-
 const bookContract = ETHEREUM_CLIENT.eth.contract(bookContractABI).at(bookContractAddress)
+const accounts = ETHEREUM_CLIENT.eth.accounts
 
 module.exports  = { 
   bookContract: bookContract,
-  bookChainContract: bookChainContract
+  bookChainContract: bookChainContract,
+  accounts: accounts
 }
