@@ -8,6 +8,7 @@ import request from 'superagent'
 import _ from 'lodash'
 import '../css/App.css'
 
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -32,6 +33,7 @@ class App extends Component {
   }
   
   addBook(book) {
+      console.log(book)        
       this.setState({
         books: this.state.books.concat({
           title: book.title,
