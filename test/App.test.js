@@ -1,9 +1,9 @@
 import React from 'react'
-import { shallow } from 'enzyme'
+import { shallow, mount } from 'enzyme'
 import { expect } from 'chai'
 
 // import the componant you want to test
-import App from '../src/App'
+import App from '../src/components/App'
 
 // this shallow method allows us to render a component
 // it isolates 1 component for testing
@@ -19,9 +19,22 @@ describe ('<App />', () => {
 
   it('should have state for isAvailable, owner, and books', () => {
     const wrapper = shallow(<App/>);
-    expect(wrapper.state().isAvailable).to.be.defined;
-    expect(wrapper.state().owner).to.be.defined;
+    expect(wrapper.state().bookchainContract).to.be.defined;
     expect(wrapper.state().books).to.be.defined;
   })
 
+  it('should have carousel for displaying books', () => {
+    const wrapper = shallow(<App />);
+    expect(wrapper.find('.slide-show')).to.have.length(1);
+  })
+
+  it('should start with add contract form', () => {
+    const wrapper = shallow(<App />);
+    expect(wrapper.find('ContractForm')).to.have.length(1);
+  })
+
+  it('should have Carousel component', () => {
+    const wrapper = shallow(<App />);
+    expect(wrapper.find('Carousel')).to.have.length(1)
+  })
 })
