@@ -28,14 +28,12 @@ class App extends Component {
   }
 
   addBookToBookchain(isbn, bookData) {
-    debugger;
     bookChainContract.createBook(isbn, {from: accounts[0], gas: 1000000});
     this.addBook(bookData);
   }
 
   addBook(book) {
       console.log(book);
-    debugger;
       this.setState({
         books: this.state.books.concat({
           title: book.title,
