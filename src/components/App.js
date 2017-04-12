@@ -1,4 +1,4 @@
-import {bookChainContract, accounts} from '../ethereum/EthereumClient'
+import {Bookchain, accounts} from '../ethereum/EthereumClient'
 import React, { Component } from 'react'
 import logo from '../logo.svg'
 import ContractForm from './ContractForm'
@@ -13,7 +13,7 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      bookchainContract: '',
+      bookchainContract: "",
       books: [
         {
           title: "Don Quixote",
@@ -28,12 +28,12 @@ class App extends Component {
   }
 
   addBookToBookchain(isbn, bookData) {
-    bookChainContract.createBook(isbn, {from: accounts[0], gas: 1000000})
+    let contract = this.state.bookchainContract
+    Bookchain.at(contract).createBook(isbn, {from: accounts[0], gas: 1000000})
     this.addBook(bookData)
   }
   
   addBook(book) {
-      console.log(book)        
       this.setState({
         books: this.state.books.concat({
           title: book.title,
@@ -49,20 +49,22 @@ class App extends Component {
     const url = `https://www.googleapis.com/books/v1/volumes?q=isbn${bookIsbn}`;
 
     request.get(url).then((res) => {
-      let bookData = _.first(res.body.items).volumeInfo
+      let bookData = _.first(res.body.items).volumeInfo;
       this.addBookToBookchain(bookIsbn, bookData)
     }).catch((err) => alert(`You hit a problem ${err}`))
   }
 
   addContract = (contract) => {
-    localStorage.setItem('contract', contract);
+    localStorage.setItem('contract', contract)
     this.setState({
-      bookchainContract: localStorage.contract
+      bookchainContract: localStorage.contract,
+      ownerWallet: accounts[0]
     })
+    this.forceUpdate()
   }
-  // componentWillMount() {
-  //   this.setState({bookchainContract: localStorage.contract})
-  // }
+  componentWillMount() {
+    this.setState({bookchainContract: localStorage.contract})
+  }
 
   render() {
     let form = null
@@ -78,7 +80,7 @@ class App extends Component {
     return (
       <div className="App">
         <div className="App-header">
-          <img src={logo} className="svg-logo" alt="logo" />
+          <img src={logo} className="svg-logo" alt="Missing Logo" />
           <h2>Bookchain</h2>
         </div>
         <div className="body">
