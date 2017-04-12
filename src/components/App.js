@@ -5,9 +5,9 @@ import ContractForm from './ContractForm';
 import BookForm from './BookForm.js';
 import Carousel from './Carousel';
 import request from 'superagent';
-const API = require('./config.json');
 import _ from 'lodash';
 import '../css/App.css';
+const API = require('./config.json');
 
 class App extends Component {
   constructor(props) {
@@ -46,7 +46,7 @@ class App extends Component {
   }
 
   getBookData = (bookIsbn) => {
-    // debugger;
+    debugger;
     const url = `https://books.google.com/books?vid=${bookIsbn}&key=${API.key}`
 
     request.get(url).then((res) => {
