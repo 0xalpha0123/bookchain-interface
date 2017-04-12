@@ -1,15 +1,21 @@
-## Bookchain 
-###### *now with 100% more React
+#### Purpose
+*Describe the purpose of the project*
+#### Getting Started
 
-### A React face for you decentralized virtual library to keep track of your centralized physical library
+*This is where the information will go to get started*
 
-### Run the Steps
-git clone this && [Bookchain Repo](https://github.com/njgheorghita/bookchain)
+*Should list the dependencies*
+
+*git clone this && [Bookchain Repo](https://github.com/njgheorghita/bookchain)*
+
+#### Contributions
+*This area will describe how to contribute*
 ```
 // Both Repos
 npm install
 // Run the localhost blockchain on port 8545 with
-testrpc 
+testrpc
 // Launch the react app to see current status with
-npm start 
+npm start
+
 ```
