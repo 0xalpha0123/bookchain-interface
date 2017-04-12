@@ -46,7 +46,6 @@ class App extends Component {
   }
 
   getBookData = (bookIsbn) => {
-    debugger;
     const url = `https://books.google.com/books?vid=${bookIsbn}&key=${API.key}`
 
     request.get(url).then((res) => {
