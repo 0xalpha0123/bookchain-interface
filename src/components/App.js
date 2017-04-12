@@ -28,12 +28,14 @@ class App extends Component {
   }
 
   addBookToBookchain(isbn, bookData) {
+    debugger;
     bookChainContract.createBook(isbn, {from: accounts[0], gas: 1000000});
     this.addBook(bookData);
   }
 
   addBook(book) {
       console.log(book);
+    debugger;
       this.setState({
         books: this.state.books.concat({
           title: book.title,
@@ -46,7 +48,7 @@ class App extends Component {
   }
 
   getBookData = (bookIsbn) => {
-    const url = `https://www.googleapis.com/books/v1/volumes?q=isbn${bookIsbn}`;
+    const url = `https://books.google.com/books?vid=${bookIsbn}`
 
     request.get(url).then((res) => {
       let bookData = _.first(res.body.items).volumeInfo
