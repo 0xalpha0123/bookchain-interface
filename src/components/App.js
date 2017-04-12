@@ -1,5 +1,10 @@
-import {bookChainContract, accounts} from '../ethereum/EthereumClient';
-import React, { Component } from 'react';
+import {
+  bookChainContract,
+  accounts
+} from '../ethereum/EthereumClient';
+import React, {
+  Component
+} from 'react';
 import logo from '../logo.svg';
 import ContractForm from './ContractForm';
 import BookForm from './BookForm.js';
@@ -14,41 +19,43 @@ class App extends Component {
     super(props);
     this.state = {
       bookchainContract: '',
-      books: [
-        {
-          title: "Don Quixote",
-          author: "Miguel de Cervantes",
-          desc: "Test book!",
-          id: "Test1"
-        }
-      ]
+      books: [{
+        title: "Don Quixote",
+        author: "Miguel de Cervantes",
+        desc: "Test book!",
+        id: "Test1"
+      }]
     };
     this.addBook = this.addBook.bind(this);
     this.addBookToBookchain = this.addBookToBookchain.bind(this);
   }
 
   addBookToBookchain(isbn, bookData) {
-    bookChainContract.createBook(isbn, {from: accounts[0], gas: 1000000});
+    bookChainContract.createBook(isbn, {
+      from: accounts[0],
+      gas: 1000000
+    });
     this.addBook(bookData);
   }
 
   addBook(book) {
-      console.log(book);
-      this.setState({
-        books: this.state.books.concat({
-          title: book.title,
-          author: book.authors[0],
-          id: book.industryIdentifiers[0].identifier,
-          desc: book.description,
-          img_url: book.imageLinks.smallThumbnail
-        })
-      });
+    console.log(book);
+    debugger;
+    this.setState({
+      books: this.state.books.concat({
+        title: book.title,
+        author: book.authors[0],
+        id: book.industryIdentifiers[0].identifier,
+        desc: book.description,
+        img_url: book.imageLinks.smallThumbnail
+      })
+    });
   }
 
   getBookData = (bookIsbn) => {
-    const url = `https://books.google.com/books?vid=${bookIsbn}&key=${API.key}`
-
-    request.get(url).then((res) => {
+    const url = `https://www.googleapis.com/books/v1/volumes?q=${bookIsbn}`;
+    request.get(url, true).withCredentials().then((res) => {
+      debugger;
       let bookData = _.first(res.body.items).volumeInfo
       this.addBookToBookchain(bookIsbn, bookData)
     }).catch((err) => alert(`You hit a problem ${err}`))
