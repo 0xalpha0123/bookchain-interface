@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 
 
 class ContractForm extends Component {
@@ -16,21 +16,21 @@ class ContractForm extends Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    this.props.addContract(this.state.value)
+    this.props.addContract(this.state.value);
     // this.setState({value: ''})
   }
 
   render() {
     return (
-      <form onSubmit={this.handleSubmit}>
+      <form tabIndex="0" onSubmit={this.handleSubmit}>
         <br/>
         <label tabIndex="0">
           <p>
             Add a Contract address
           </p>
-          <input className="Contract-form" type="name" value={this.state.value} onChange={this.handleChange} />
+          <input tabIndex="0" className="Contract-form" type="name" value={this.state.value} onChange={this.handleChange} />
         </label>
-        <input type="submit" value="Submit" />
+        <input tabIndex="0" type="submit" value="Submit" />
       </form>
     );
   }

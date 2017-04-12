@@ -1,12 +1,12 @@
-import {bookChainContract, accounts} from '../ethereum/EthereumClient'
-import React, { Component } from 'react'
-import logo from '../logo.svg'
-import ContractForm from './ContractForm'
-import BookForm from './BookForm.js'
-import Carousel from './Carousel'
-import request from 'superagent'
-import _ from 'lodash'
-import '../css/App.css'
+import {bookChainContract, accounts} from '../ethereum/EthereumClient';
+import React, { Component } from 'react';
+import logo from '../logo.svg';
+import ContractForm from './ContractForm';
+import BookForm from './BookForm.js';
+import Carousel from './Carousel';
+import request from 'superagent';
+import _ from 'lodash';
+import '../css/App.css';
 
 
 class App extends Component {
@@ -28,12 +28,12 @@ class App extends Component {
   }
 
   addBookToBookchain(isbn, bookData) {
-    bookChainContract.createBook(isbn, {from: accounts[0], gas: 1000000})
-    this.addBook(bookData)
+    bookChainContract.createBook(isbn, {from: accounts[0], gas: 1000000});
+    this.addBook(bookData);
   }
-  
+
   addBook(book) {
-      console.log(book)        
+      console.log(book);
       this.setState({
         books: this.state.books.concat({
           title: book.title,
@@ -42,8 +42,8 @@ class App extends Component {
           desc: book.description,
           img_url: book.imageLinks.smallThumbnail
         })
-      })
-  };
+      });
+  }
 
   getBookData = (bookIsbn) => {
     const url = `https://www.googleapis.com/books/v1/volumes?q=isbn${bookIsbn}`;
@@ -58,15 +58,15 @@ class App extends Component {
     localStorage.setItem('contract', contract);
     this.setState({
       bookchainContract: localStorage.contract
-    })
-  }
+    });
+  };
   // componentWillMount() {
   //   this.setState({bookchainContract: localStorage.contract})
   // }
 
   render() {
-    let form = null
-    let wallet = null
+    let form = null;
+    let wallet = null;
     if (this.state.bookchainContract) {
       form = <BookForm getBookData={this.getBookData}/>
       wallet = <div> Wallet ID = {this.state.bookchainContract} </div>

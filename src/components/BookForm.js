@@ -15,22 +15,22 @@ class BookForm extends Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    this.props.getBookData(this.state.value)
-    this.setState({value: ''})
+    this.props.getBookData(this.state.value);
+    this.setState({value: ''});
 
   }
 
   render() {
     return (
-      <form onSubmit={this.handleSubmit}>
+      <form tabIndex="0" onSubmit={this.handleSubmit}>
         <br/>
         <label tabIndex="0">
           <p>
             Add a book by isbn
           </p>
-          <input className="book-form" type="name" value={this.state.value} onChange={this.handleChange} />
+          <input tabIndex="0" className="book-form" type="name" value={this.state.value} onChange={this.handleChange} />
         </label>
-        <input type="submit" value="Submit" />
+        <input tabIndex="0" type="submit" value="Submit" />
       </form>
     );
   }

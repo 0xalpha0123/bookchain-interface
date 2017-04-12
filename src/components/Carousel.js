@@ -24,7 +24,7 @@ class Carousel extends Component {
         <em> by: {book.author} </em>
         <div className="container">
           <div className="col">
-            <img src={book.img_url} alt="Not Found"/>
+            <img tabIndex="0" src={book.img_url} alt="Not Found"/>
           </div>
           <div className="col">
             {_.take(book.desc, 700)}... 
