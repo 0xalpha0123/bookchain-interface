@@ -30,24 +30,25 @@ class App extends Component {
     this.addBookToBookchain = this.addBookToBookchain.bind(this);
   }
 
-  addBookToBookchain(isbn, bookData) {
+  addBookToBookchain(isbn, bookData, accessibilityData) {
     bookChainContract.createBook(isbn, {
       from: accounts[0],
       gas: 1000000
     });
-    this.addBook(bookData);
+    this.addBook(bookData, accessibilityData);
   }
 
-  addBook(book) {
+  addBook(book, accessibilityData) {
     console.log(book);
-    debugger;
+
     this.setState({
       books: this.state.books.concat({
         title: book.title,
         author: book.authors[0],
         id: book.industryIdentifiers[0].identifier,
         desc: book.description,
-        img_url: book.imageLinks.smallThumbnail
+        img_url: book.imageLinks.smallThumbnail,
+        accessibile: accessibilityData
       })
     });
   }
@@ -56,8 +57,9 @@ class App extends Component {
     const url = `https://www.googleapis.com/books/v1/volumes?q=${bookIsbn}`;
     request.get(url, true).withCredentials().then((res) => {
       debugger;
+      let accessibilityData = _.first(res.body.items).accessInfo.textToSpeechPermission
       let bookData = _.first(res.body.items).volumeInfo
-      this.addBookToBookchain(bookIsbn, bookData)
+      this.addBookToBookchain(bookIsbn, bookData, accessibilityData)
     }).catch((err) => alert(`You hit a problem ${err}`))
   }
 

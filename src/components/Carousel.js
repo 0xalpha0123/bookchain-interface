@@ -29,6 +29,9 @@ class Carousel extends Component {
           <div className="col">
             {_.take(book.desc, 700)}...
           </div>
+          <div className="col">
+            <img tabIndex="0" src={book.accessibile} alt="Not Found"/>
+          </div>
         </div>
         <br/>
       </div>
