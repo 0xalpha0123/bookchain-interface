@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import Slider from 'react-slick';
+import _ from 'lodash'
+import '../css/Carousel.css'
 
 
 class Carousel extends Component {
@@ -10,7 +12,8 @@ class Carousel extends Component {
       speed: 500,
       arrows: true,
       slidesToShow: 1,
-      slidesToScroll: 1
+      slidesToScroll: 1,
+      accessibility: true
     };
     const slideShow = this.props.books.map((book) => 
       <div 
@@ -18,10 +21,16 @@ class Carousel extends Component {
         key={book.id}
         >
         <h3 tabIndex="0">{book.title}</h3>
-        <img src={book.img_url} alt="Image Not Found"/>
-        <h4>by: {book.author}</h4>
+        <em> by: {book.author} </em>
+        <div className="container">
+          <div className="col">
+            <img src={book.img_url} alt="Not Found"/>
+          </div>
+          <div className="col">
+            {_.take(book.desc, 700)}... 
+          </div>
+        </div>
         <br/>
-        id:{book.id}
       </div>
     )
     return (
