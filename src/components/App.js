@@ -9,6 +9,7 @@ import _ from 'lodash'
 import '../css/App.css'
 
 
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -42,15 +43,18 @@ class App extends Component {
           desc: book.description,
           img_url: book.imageLinks.smallThumbnail
         })
+
       })
-  };
+    });
+  }
 
   getBookData = (bookIsbn) => {
-    const url = `https://www.googleapis.com/books/v1/volumes?q=isbn${bookIsbn}`;
 
-    request.get(url).then((res) => {
-      let bookData = _.first(res.body.items).volumeInfo;
-      this.addBookToBookchain(bookIsbn, bookData)
+    const url = `https://www.googleapis.com/books/v1/volumes?q=${bookIsbn}`;
+    request.get(url, true).withCredentials().then((res) => {
+      let accessibilityData = _.first(res.body.items).accessInfo.textToSpeechPermission
+      let bookData = _.first(res.body.items).volumeInfo
+      this.addBookToBookchain(bookIsbn, bookData, accessibilityData)
     }).catch((err) => alert(`You hit a problem ${err}`))
   }
 
@@ -66,9 +70,10 @@ class App extends Component {
     this.setState({bookchainContract: localStorage.contract})
   }
 
+
   render() {
-    let form = null
-    let wallet = null
+    let form = null;
+    let wallet = null;
     if (this.state.bookchainContract) {
       form = <BookForm getBookData={this.getBookData}/>
       wallet = <div> Wallet ID = {this.state.bookchainContract} </div>

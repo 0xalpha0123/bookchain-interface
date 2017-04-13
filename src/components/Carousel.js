@@ -15,8 +15,8 @@ class Carousel extends Component {
       slidesToScroll: 1,
       accessibility: true
     };
-    const slideShow = this.props.books.map((book) => 
-      <div 
+    const slideShow = this.props.books.map((book) =>
+      <div
         className="book-slide"
         key={book.id}
         >
@@ -24,10 +24,13 @@ class Carousel extends Component {
         <em> by: {book.author} </em>
         <div className="container">
           <div className="col">
-            <img src={book.img_url} alt="Not Found"/>
+            <img tabIndex="0" src={book.img_url} alt="Not Found"/>
           </div>
           <div className="col">
-            {_.take(book.desc, 700)}... 
+            {_.take(book.desc, 700)}...
+          </div>
+          <div className="col">
+            <img tabIndex="0" src={book.accessibile} alt="Not Found"/>
           </div>
         </div>
         <br/>
