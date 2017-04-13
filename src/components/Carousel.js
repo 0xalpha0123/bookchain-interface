@@ -40,19 +40,23 @@ class Carousel extends Component {
       slidesToScroll: 1,
       accessibility: true
     };
-    const slideShow = this.props.books.map((book) => 
-      <div 
+
+
+
+    const slideShow = this.props.books.map((book) =>
+      <div
         className="book-slide"
         key={book.id}
         >
         <h3 tabIndex="0">{book.title}</h3>
+            isbn: {book.id} <br/>
         <em> by: {book.author} </em>
         <div className="container">
           <div className="col">
-            <img src={book.img_url} alt="Not Found"/>
+            <img tabIndex="0" src={book.img_url} alt="Not Found"/><br/>
           </div>
           <div className="col">
-            {_.take(book.desc, 700)}... 
+            {_.take(book.desc, 500)}...
           </div>
         </div>
         {this.checkoutButton(book)}
