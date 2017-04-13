@@ -5,11 +5,17 @@
 
 .col {
   flex: 1;
-  /*align-content: center;*/
+  align-content: center;
   overflow: hidden;
   text-overflow: ellipsis;
-  font-size: 15px;
-  padding: 1.5em;
+  font-size: 18px;
+  padding: 1.2em;
+}
+
+.wallet {
+  text-align: center;
+  padding: 3.5em;
+  font-size: 18px;
 }
 
 

@@ -1,5 +1,7 @@
 import Web3 from 'web3';
 
+const WEB3 = new Web3()
+
 const ETHEREUM_CLIENT = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"))
 
 const bookChainContractABI = [
@@ -16,6 +18,19 @@ const bookChainContractABI = [
         {
           "name": "",
           "type": "bool"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "bookcoinContract",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
         }
       ],
       "payable": false,
@@ -44,6 +59,19 @@ const bookChainContractABI = [
       "inputs": [],
       "name": "kill",
       "outputs": [],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [],
+      "name": "registerUser",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
       "payable": false,
       "type": "function"
     },
@@ -103,6 +131,32 @@ const bookChainContractABI = [
       "constant": false,
       "inputs": [
         {
+          "name": "_from",
+          "type": "address"
+        },
+        {
+          "name": "_to",
+          "type": "address"
+        },
+        {
+          "name": "_amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "payment",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
           "name": "_isbn",
           "type": "bytes32"
         }
@@ -112,6 +166,19 @@ const bookChainContractABI = [
         {
           "name": "",
           "type": "bool"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [],
+      "name": "bookcoinTotalSupply",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
         }
       ],
       "payable": false,
@@ -130,6 +197,24 @@ const bookChainContractABI = [
         {
           "name": "",
           "type": "address"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_account",
+          "type": "address"
+        }
+      ],
+      "name": "getBalance",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
         }
       ],
       "payable": false,
@@ -221,5 +306,6 @@ const accounts = ETHEREUM_CLIENT.eth.accounts
 
 module.exports  = { 
   Bookchain: Bookchain,
-  accounts: accounts
+  accounts: accounts,
+  WEB3: WEB3
 }

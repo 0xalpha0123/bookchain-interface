@@ -1,14 +1,13 @@
-import {Bookchain, accounts} from '../ethereum/EthereumClient'
+import {Bookchain, accounts } from '../ethereum/EthereumClient'
 import React, { Component } from 'react'
 import logo from '../logo.svg'
 import ContractForm from './ContractForm'
+import ParseBooks from './ParseBooks'
 import BookForm from './BookForm.js'
 import Carousel from './Carousel'
 import request from 'superagent'
 import _ from 'lodash'
 import '../css/App.css'
-
-
 
 class App extends Component {
   constructor(props) {
@@ -20,7 +19,7 @@ class App extends Component {
           title: "Don Quixote",
           author: "Miguel de Cervantes",
           desc: "Test book!",
-          id: "9788899447687",
+          id: "9780679602866",
           status: true
         }
       ]
@@ -29,13 +28,13 @@ class App extends Component {
     this.addBookToBookchain = this.addBookToBookchain.bind(this);
   }
 
-  addBookToBookchain(isbn, bookData, accessibilityData) {
+  addBookToBookchain(title, bookData) {
     let contract = this.state.bookchainContract
-    Bookchain.at(contract).createBook(isbn, {from: accounts[0], gas: 1000000})
-    this.addBook(bookData, accessibilityData)
+    Bookchain.at(contract).createBook(title, {from: accounts[0], gas: 1000000})
+    this.addBook(title, bookData)
   }
   
-  addBook(book, accessibilityData) {
+  addBook(title, book) {
       this.setState({
         books: this.state.books.concat({
           title: book.title,
@@ -43,20 +42,28 @@ class App extends Component {
           id: book.industryIdentifiers[0].identifier,
           desc: book.description,
           img_url: book.imageLinks.smallThumbnail,
-          accessibile: accessibilityData
+          status: true
         })
-
       })
   }
   
-  getBookData = (bookIsbn) => {
-    const url = `https://www.googleapis.com/books/v1/volumes?q=${bookIsbn}`;
+  getBookData = (bookTitle) => {
+    const url = `https://www.googleapis.com/books/v1/volumes?q=${bookTitle}`;
     request.get(url, true).withCredentials().then((res) => {
-      let accessibilityData = _.first(res.body.items).accessInfo.textToSpeechPermission
       let bookData = _.first(res.body.items).volumeInfo
-      let bookId = bookData.industryIdentifiers[0].identifier
-      this.addBookToBookchain(bookId, bookData, accessibilityData)
-    }).catch((err) => alert(`You hit a problem ${err}`))
+      this.addBookToBookchain(bookData.title, bookData)
+    }).catch((err) => alert(`Not a good ISBN or You may have hit a problem ${err}`))
+  }
+  
+  getBooks() {
+    let bookList = Bookchain.at(localStorage.contract).getBookshelf()    
+    this.setState({
+      bookchainBooks: {
+        titles: bookList[0],
+        addresses: bookList[1],
+        status: bookList[2]
+      }
+    })
   }
 
   addContract = (contract) => {
@@ -70,28 +77,31 @@ class App extends Component {
 
   componentWillMount() {
     this.setState({
-      bookchainContract: localStorage.contract
+      bookchainContract: localStorage.contract,
     })
-    console.log(Bookchain.at(localStorage.contract).getBookshelf())
+    this.getBooks()
   }
-
+  
+  componentDidMount() {
+    ParseBooks(this.state.bookchainBooks, this.getBookData)
+  }
+  
   checkoutBook(id) {
     Bookchain.at(this.state.bookchainContract).checkoutBook(id)
   }
-
 
   render() {
     let form = null;
     let wallet = null;
     if (this.state.bookchainContract) {
       form = <BookForm getBookData={this.getBookData}/>
-      wallet = <div> Wallet ID = {this.state.bookchainContract} </div>
+      wallet = <div> Wallet ID = <br/>{this.state.bookchainContract} </div>
     } else {
       form = <ContractForm addContract={this.addContract} />
     }
 
-
     return (
+      
       <div className="App">
         <div className="App-header">
           <img src={logo} className="svg-logo" alt="Missing Logo" />
@@ -102,7 +112,7 @@ class App extends Component {
             <Carousel return={this.returnBook} checkout={this.checkoutBook} books={this.state.books} />
             <br/>
             <div className="container">
-              <div className="col">{wallet}</div>
+              <div className="col wallet">{wallet}</div>
               <div className="col">{form}</div>
             </div>
           </div>

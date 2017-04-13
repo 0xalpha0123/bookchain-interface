@@ -15,7 +15,7 @@ class Carousel extends Component {
 
   handleClick = (book) => {
     console.log(book)
-    this.props.checkout(book.id)
+    // this.props.checkout(book.id)
   }
   checkoutButton(book) {
     if (book.status === false) {
