@@ -4,19 +4,24 @@ import React, { Component } from 'react';
 class ContractForm extends Component {
   constructor(props) {
     super(props);
-    this.state = {value: ""};
+    this.state = {coinAddress: "",
+                  chainAddress: ""};
 
-    this.handleChange = this.handleChange.bind(this);
+    this.handleChain = this.handleChain.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleChange(event) {
-    this.setState({value: event.target.value});
+  handleChain(event) {
+    this.setState({chainAddress: event.target.value});
+  }
+
+  handleCoin(event) {
+    this.setState({coinAddress: event.target.value});
   }
 
   handleSubmit(event) {
     event.preventDefault();
-    this.props.addContract(this.state.value)
+    this.props.addContract(this.state.chainAddress)
   }
 
   render() {
@@ -27,7 +32,8 @@ class ContractForm extends Component {
           <p>
             Add a Contract address
           </p>
-          <input tabIndex="0" className="Contract-form" type="name" value={this.state.value} onChange={this.handleChange} />
+          <input tabIndex="0" className="Contract-form" type="name" value={this.state.chainAddress} onChange={this.handleChain} />
+          {/*<input tabIndex="0" className="Contract-form" type="name" value={this.state.coinAddress} onChange={this.handleCoin} />*/}
         </label>
         <input tabIndex="0" type="submit" value="Submit" />
       </form>
