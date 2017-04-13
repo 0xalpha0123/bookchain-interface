@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 class ContractForm extends Component {
   constructor(props) {
     super(props);
-    this.state = {value: ''};
+    this.state = {value: ""};
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -16,8 +16,7 @@ class ContractForm extends Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    this.props.addContract(this.state.value);
-    // this.setState({value: ''})
+    this.props.addContract(this.state.value)
   }
 
   render() {
