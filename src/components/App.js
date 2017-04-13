@@ -28,20 +28,21 @@ class App extends Component {
     this.addBookToBookchain = this.addBookToBookchain.bind(this);
   }
 
-  addBookToBookchain(isbn, bookData) {
+  addBookToBookchain(isbn, bookData, accessibilityData) {
     let contract = this.state.bookchainContract
     Bookchain.at(contract).createBook(isbn, {from: accounts[0], gas: 1000000})
-    this.addBook(bookData)
+    this.addBook(bookData, accessibilityData)
   }
   
-  addBook(book) {
+  addBook(book, accessibilityData) {
       this.setState({
         books: this.state.books.concat({
           title: book.title,
           author: book.authors[0],
           id: book.industryIdentifiers[0].identifier,
           desc: book.description,
-          img_url: book.imageLinks.smallThumbnail
+          img_url: book.imageLinks.smallThumbnail,
+          accessibile: accessibilityData
         })
 
       })
