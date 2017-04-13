@@ -18,7 +18,7 @@ class App extends Component {
       bookchainContract: "",
       userWallet: "",
       books: [{
-        title: "This is the template",
+        title: "Bookchain project: A decentralized library",
         status: null,
         id: "test",
         img_url: "https://bookchainproject.com/_media/images/logo.png",
@@ -30,6 +30,7 @@ class App extends Component {
     this.addBookToBookchain = this.addBookToBookchain.bind(this);
     this.addContract = this.addContract.bind(this);
     this.getBooks = this.getBooks.bind(this);
+    this.updateBank = this.updateBank.bind(this);
     this.changeBookStatus = this.changeBookStatus.bind(this);
   }
 
@@ -89,23 +90,26 @@ class App extends Component {
     this.forceUpdate()
   }
 
-  componentWillMount() {
+  updateBank() {
     let money = Bookcoin.at(localStorage.localBookcoin).totalSupply({from: accounts[0]}).toString(10)
     let vault = Bookcoin.at(localStorage.localBookcoin).balanceOf(localStorage.localBookchain, {from: accounts[0]}).toString(10)
     let userAccount = Bookcoin.at(localStorage.localBookcoin).balanceOf(accounts[0], {from: accounts[0]}).toString(10)
-    
     this.setState({
       bookchainContract: localStorage.localBookchain,
       bookcoinContract: localStorage.localBookcoin,
       userWallet: accounts[0],
-      money: money,
+      money: Bookcoin.at(localStorage.localBookcoin).totalSupply({from: accounts[0]}).toString(10),
       vault: vault,
       userAccount: userAccount
     })
+    this.forceUpdate()
+  }
+  componentWillMount() {
     this.getBooks()
   }
   
   componentDidMount() {
+    this.updateBank()
     ParseBooks(this.state.bookchainBooks, this.getBookData)    
   }
 
@@ -115,6 +119,7 @@ class App extends Component {
 
   returnBook(title) {
     Bookchain.at(localStorage.localBookchain).returnBook(title, {from: accounts[0], gas: 1000000})
+    // this.updateBank()
   }
 
   changeBookStatus(updatedBook) {
@@ -126,6 +131,7 @@ class App extends Component {
         } else { book.status = true }
       }
     })
+    this.updateBank()
     this.forceUpdate()
   }
 
