@@ -2,15 +2,54 @@ import Web3 from 'web3';
 
 const ETHEREUM_CLIENT = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"))
 
-const bookContractABI = [
+const bookcoinContractABI = [
     {
       "constant": false,
+      "inputs": [
+        {
+          "name": "_newSellPrice",
+          "type": "uint256"
+        },
+        {
+          "name": "_newBuyPrice",
+          "type": "uint256"
+        }
+      ],
+      "name": "setPrices",
+      "outputs": [],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
       "inputs": [],
-      "name": "checkout",
+      "name": "name",
       "outputs": [
         {
           "name": "",
-          "type": "uint8"
+          "type": "string"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_spender",
+          "type": "address"
+        },
+        {
+          "name": "_value",
+          "type": "uint256"
+        }
+      ],
+      "name": "approve",
+      "outputs": [
+        {
+          "name": "success",
+          "type": "bool"
         }
       ],
       "payable": false,
@@ -19,7 +58,51 @@ const bookContractABI = [
     {
       "constant": true,
       "inputs": [],
-      "name": "getBalance",
+      "name": "totalSupply",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_owner",
+          "type": "address"
+        },
+        {
+          "name": "_to",
+          "type": "address"
+        },
+        {
+          "name": "_value",
+          "type": "uint256"
+        }
+      ],
+      "name": "transferFrom",
+      "outputs": [
+        {
+          "name": "success",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "name": "balances",
       "outputs": [
         {
           "name": "",
@@ -32,7 +115,7 @@ const bookContractABI = [
     {
       "constant": true,
       "inputs": [],
-      "name": "status",
+      "name": "decimals",
       "outputs": [
         {
           "name": "",
@@ -43,17 +126,88 @@ const bookContractABI = [
       "type": "function"
     },
     {
-      "constant": false,
+      "constant": true,
       "inputs": [],
-      "name": "kill",
-      "outputs": [],
+      "name": "sellPrice",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
       "payable": false,
       "type": "function"
     },
     {
       "constant": true,
       "inputs": [],
-      "name": "isbn",
+      "name": "version",
+      "outputs": [
+        {
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "",
+          "type": "address"
+        },
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "name": "allowances",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "_address",
+          "type": "address"
+        }
+      ],
+      "name": "balanceOf",
+      "outputs": [
+        {
+          "name": "balance",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "buyPrice",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "symbol",
       "outputs": [
         {
           "name": "",
@@ -65,34 +219,43 @@ const bookContractABI = [
     },
     {
       "constant": false,
-      "inputs": [],
-      "name": "returnBook",
-      "outputs": [
+      "inputs": [
         {
-          "name": "",
-          "type": "uint8"
+          "name": "_amountToMint",
+          "type": "uint256"
         }
       ],
+      "name": "mint",
+      "outputs": [],
       "payable": false,
       "type": "function"
     },
     {
-      "constant": true,
+      "constant": false,
       "inputs": [],
-      "name": "borrower",
+      "name": "buy",
       "outputs": [
         {
-          "name": "",
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "payable": true,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_to",
           "type": "address"
+        },
+        {
+          "name": "_value",
+          "type": "uint256"
         }
       ],
-      "payable": false,
-      "type": "function"
-    },
-    {
-      "constant": true,
-      "inputs": [],
-      "name": "isAvailable",
+      "name": "transfer",
       "outputs": [
         {
           "name": "",
@@ -105,7 +268,7 @@ const bookContractABI = [
     {
       "constant": true,
       "inputs": [],
-      "name": "owner",
+      "name": "centralMinter",
       "outputs": [
         {
           "name": "",
@@ -117,42 +280,162 @@ const bookContractABI = [
     },
     {
       "constant": true,
-      "inputs": [],
-      "name": "arbiter",
-      "outputs": [
+      "inputs": [
         {
-          "name": "",
+          "name": "_owner",
+          "type": "address"
+        },
+        {
+          "name": "_spender",
           "type": "address"
         }
       ],
+      "name": "allowance",
+      "outputs": [
+        {
+          "name": "remaining",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "sell",
+      "outputs": [
+        {
+          "name": "revenue",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_newMinter",
+          "type": "address"
+        }
+      ],
+      "name": "transferMinter",
+      "outputs": [],
       "payable": false,
       "type": "function"
     },
     {
       "inputs": [
         {
-          "name": "_isbn",
-          "type": "string"
+          "name": "_initialAmount",
+          "type": "uint256"
         },
         {
-          "name": "_arbiter",
+          "name": "_minter",
           "type": "address"
         }
       ],
       "payable": false,
       "type": "constructor"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "name": "_from",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "name": "_to",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "name": "_value",
+          "type": "uint256"
+        }
+      ],
+      "name": "Transfer",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "name": "_owner",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "name": "_spender",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "name": "_value",
+          "type": "uint256"
+        }
+      ],
+      "name": "Approval",
+      "type": "event"
     }
   ]
 
 const bookChainContractABI = [
     {
-      "constant": true,
-      "inputs": [],
-      "name": "getBookshelfCount",
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_isbn",
+          "type": "bytes32"
+        }
+      ],
+      "name": "returnBook",
       "outputs": [
         {
           "name": "",
-          "type": "uint256"
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "bookcoinContract",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "",
+          "type": "bytes32"
+        }
+      ],
+      "name": "checkBook",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
         }
       ],
       "payable": false,
@@ -167,23 +450,15 @@ const bookChainContractABI = [
       "type": "function"
     },
     {
-      "constant": true,
+      "constant": false,
       "inputs": [],
-      "name": "owner",
+      "name": "registerUser",
       "outputs": [
         {
           "name": "",
-          "type": "address"
+          "type": "bool"
         }
       ],
-      "payable": false,
-      "type": "function"
-    },
-    {
-      "constant": false,
-      "inputs": [],
-      "name": "availableBooks",
-      "outputs": [],
       "payable": false,
       "type": "function"
     },
@@ -192,7 +467,7 @@ const bookChainContractABI = [
       "inputs": [
         {
           "name": "_isbn",
-          "type": "string"
+          "type": "bytes32"
         }
       ],
       "name": "createBook",
@@ -206,15 +481,93 @@ const bookChainContractABI = [
       "type": "function"
     },
     {
-      "constant": false,
-      "inputs": [
+      "constant": true,
+      "inputs": [],
+      "name": "getBookshelf",
+      "outputs": [
         {
-          "name": "_bookContract",
+          "name": "",
+          "type": "bytes32[]"
+        },
+        {
+          "name": "",
+          "type": "address[]"
+        },
+        {
+          "name": "",
+          "type": "bool[]"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "owner",
+      "outputs": [
+        {
+          "name": "",
           "type": "address"
         }
       ],
-      "name": "borrowBook",
-      "outputs": [],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_from",
+          "type": "address"
+        },
+        {
+          "name": "_to",
+          "type": "address"
+        },
+        {
+          "name": "_amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "payment",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_isbn",
+          "type": "bytes32"
+        }
+      ],
+      "name": "checkoutBook",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [],
+      "name": "bookcoinTotalSupply",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
       "payable": false,
       "type": "function"
     },
@@ -222,15 +575,33 @@ const bookChainContractABI = [
       "constant": true,
       "inputs": [
         {
-          "name": "index",
-          "type": "uint256"
+          "name": "",
+          "type": "address"
         }
       ],
-      "name": "getBookshelf",
+      "name": "checkoutLedger",
       "outputs": [
         {
           "name": "",
-          "type": "string"
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_account",
+          "type": "address"
+        }
+      ],
+      "name": "getBalance",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
         }
       ],
       "payable": false,
@@ -248,7 +619,15 @@ const bookChainContractABI = [
       "outputs": [
         {
           "name": "isbn",
-          "type": "string"
+          "type": "bytes32"
+        },
+        {
+          "name": "bookContractAddress",
+          "type": "address"
+        },
+        {
+          "name": "status",
+          "type": "bool"
         }
       ],
       "payable": false,
@@ -270,12 +649,7 @@ const bookChainContractABI = [
         {
           "indexed": false,
           "name": "isbn",
-          "type": "string"
-        },
-        {
-          "indexed": false,
-          "name": "owner",
-          "type": "address"
+          "type": "bytes32"
         }
       ],
       "name": "bookAddedToShelf",
@@ -287,12 +661,7 @@ const bookChainContractABI = [
         {
           "indexed": false,
           "name": "isbn",
-          "type": "string"
-        },
-        {
-          "indexed": false,
-          "name": "owner",
-          "type": "address"
+          "type": "bytes32"
         }
       ],
       "name": "bookMadeAvailable",
@@ -304,27 +673,29 @@ const bookChainContractABI = [
         {
           "indexed": false,
           "name": "isbn",
-          "type": "string"
-        },
-        {
-          "indexed": false,
-          "name": "owner",
-          "type": "address"
+          "type": "bytes32"
         }
       ],
       "name": "bookMadeUnavailable",
       "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [],
+      "name": "refreshBookshelf",
+      "type": "event"
     }
   ]
 
-// const bookContractAddress = '0x59d4c0df67d9c48ea430c53d2d7393cb86dc8cec'
-const bookChainContractAddress = '0xeda30d3db177d718c6f3e961e08d27ff33cb98b9'
+const bookcoinContractAddress = '0x2ccaea21c284d7fa9e8645f26ae736f986373b77'
+const bookChainContractAddress = '0x05368620a6587c3187ca980676e147a0406bcde6'
 
-// const bookContract = ETHEREUM_CLIENT.eth.contract(bookContractABI)//.at(bookContractAddress)
+const bookcoinContract = ETHEREUM_CLIENT.eth.contract(bookcoinContractABI).at(bookcoinContractAddress)
 const bookChainContract = ETHEREUM_CLIENT.eth.contract(bookChainContractABI).at(bookChainContractAddress)
 const accounts = ETHEREUM_CLIENT.eth.accounts
 
 module.exports  = { 
   bookChainContract: bookChainContract,
+  bookcoinContract: bookcoinContract,
   accounts: accounts
 }

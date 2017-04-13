@@ -1,7 +1,8 @@
-import {bookChainContract, accounts} from '../ethereum/EthereumClient'
+import {bookChainContract, bookcoinContract, accounts} from '../ethereum/EthereumClient'
 import React, { Component } from 'react'
 import logo from '../logo.svg'
 import ContractForm from './ContractForm'
+import Bank from './Bank.js'
 import BookForm from './BookForm.js'
 import Carousel from './Carousel'
 import request from 'superagent'
@@ -13,7 +14,8 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      bookchainContract: '',
+      bookcoinContract: bookChainContract.bookcoinContract(),
+      userWallet: accounts[0],
       books: [
         {
           title: "Don Quixote",
@@ -28,12 +30,11 @@ class App extends Component {
   }
 
   addBookToBookchain(isbn, bookData) {
-    bookChainContract.createBook(isbn, {from: accounts[0], gas: 1000000})
+    bookChainContract.createBook(isbn, {from: this.state.userWallet, gas: 1000000})
     this.addBook(bookData)
   }
   
   addBook(book) {
-      console.log(book)        
       this.setState({
         books: this.state.books.concat({
           title: book.title,
@@ -60,9 +61,21 @@ class App extends Component {
       bookchainContract: localStorage.contract
     })
   }
-  // componentWillMount() {
+
+  getMoney() {
+    let money = bookcoinContract.totalSupply({from: this.state.userWallet}).toString(10)
+    let vault = bookcoinContract.balanceOf(this.state.userWallet, {from: bookChainContract}).toString(10)
+    let userAccount = bookcoinContract.balanceOf(this.state.userWallet, {from: this.state.userWallet}).toString(10)
+    this.setState({
+      money: money,
+      vault: vault,
+      userAccount: userAccount
+    })
+  }
+  componentWillMount() {
+    this.getMoney()
   //   this.setState({bookchainContract: localStorage.contract})
-  // }
+  }
 
   render() {
     let form = null
@@ -89,6 +102,9 @@ class App extends Component {
             {form}
           </div>
           <br/>
+          <div className="bank">
+            <Bank money={this.state.money} userAccount={this.state.userAccount}/>
+          </div>
         </div>
       </div>
     );
