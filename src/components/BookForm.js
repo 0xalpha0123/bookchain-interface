@@ -26,7 +26,7 @@ class BookForm extends Component {
         <br/>
         <label tabIndex="0">
           <p>
-            Add a book by isbn
+            Add a book by <em>Title</em>
           </p>
           <input tabIndex="0" className="book-form" type="name" value={this.state.value} onChange={this.handleChange} />
         </label>

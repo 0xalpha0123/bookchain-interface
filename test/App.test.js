@@ -12,6 +12,7 @@ import App from '../src/components/App'
 // * static allows you to pass expectations on the HTML inside the component
 
 describe ('<App />', () => {
+
   it('should have svg icon', () => {
     const wrapper = shallow(<App/>);
     expect(wrapper.find('.svg-logo')).to.have.length(1);

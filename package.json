@@ -42,6 +42,7 @@
     "jest": "18.1.0",
     "json-loader": "0.5.4",
     "mocha": "^3.2.0",
+    "mock-local-storage": "^1.0.2",
     "object-assign": "4.1.1",
     "postcss-loader": "1.2.2",
     "promise": "7.1.1",
@@ -58,7 +59,7 @@
   "scripts": {
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
-    "test": "NODE_ENV=test mocha --require ./testSetup.js --compilers babel-core/register ./test/*test.js",
+    "test": "NODE_ENV=test mocha --require mock-local-storage ./testSetup.js --compilers babel-core/register ./test/*test.js",
     "test:watch": "npm test -- -w"
   },
   "jest": {
