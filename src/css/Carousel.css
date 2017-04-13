@@ -5,9 +5,11 @@
 
 .col {
   flex: 1;
-  align-content: center;
+  /*align-content: center;*/
   overflow: hidden;
   text-overflow: ellipsis;
   font-size: 15px;
   padding: 1.5em;
 }
+
+

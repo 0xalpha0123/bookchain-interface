@@ -20,7 +20,8 @@ class App extends Component {
           title: "Don Quixote",
           author: "Miguel de Cervantes",
           desc: "Test book!",
-          id: "Test1"
+          id: "9788899447687",
+          status: true
         }
       ]
     };
@@ -46,16 +47,15 @@ class App extends Component {
         })
 
       })
-    });
   }
-
+  
   getBookData = (bookIsbn) => {
-
     const url = `https://www.googleapis.com/books/v1/volumes?q=${bookIsbn}`;
     request.get(url, true).withCredentials().then((res) => {
       let accessibilityData = _.first(res.body.items).accessInfo.textToSpeechPermission
       let bookData = _.first(res.body.items).volumeInfo
-      this.addBookToBookchain(bookIsbn, bookData, accessibilityData)
+      let bookId = bookData.industryIdentifiers[0].identifier
+      this.addBookToBookchain(bookId, bookData, accessibilityData)
     }).catch((err) => alert(`You hit a problem ${err}`))
   }
 
@@ -67,8 +67,16 @@ class App extends Component {
     })
     this.forceUpdate()
   }
+
   componentWillMount() {
-    this.setState({bookchainContract: localStorage.contract})
+    this.setState({
+      bookchainContract: localStorage.contract
+    })
+    console.log(Bookchain.at(localStorage.contract).getBookshelf())
+  }
+
+  checkoutBook(id) {
+    Bookchain.at(this.state.bookchainContract).checkoutBook(id)
   }
 
 
@@ -91,10 +99,12 @@ class App extends Component {
         </div>
         <div className="body">
           <div className="slide-show">
-            <Carousel books={this.state.books} />
+            <Carousel return={this.returnBook} checkout={this.checkoutBook} books={this.state.books} />
             <br/>
-            <div>{wallet}</div>
-            {form}
+            <div className="container">
+              <div className="col">{wallet}</div>
+              <div className="col">{form}</div>
+            </div>
           </div>
           <br/>
         </div>
