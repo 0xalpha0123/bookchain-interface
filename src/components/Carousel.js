@@ -8,20 +8,34 @@ class Carousel extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      book: ""
+      bookStatus: null
     }
-    this.handleClick = this.handleClick.bind(this);
+    this.checkoutBook = this.checkoutBook.bind(this);
+    this.returnBook = this.returnBook.bind(this);
   }
 
-  handleClick = (book) => {
-    console.log(book)
-    // this.props.checkout(book.id)
+  componentDidMount() {
+    this.setState({
+      bookStatus: ''
+    })
   }
+  checkoutBook = (book) => {
+    this.props.checkout(book.title)
+    this.props.changeBookStatus(book)
+  }
+
+  returnBook = (book) => {
+    this.props.return(book.title)
+    this.props.changeBookStatus(book)
+  }
+
   checkoutButton(book) {
     if (book.status === false) {
-      return <button onClick={console.log("not string")}> Return </button>
+      return <button value={book.title} onClick={() => this.returnBook(book)}> Return </button>
+    } else if (book.status === true) {
+      return <button value={book.title} onClick={() => this.checkoutBook(book)}> Checkout </button> 
     } else {
-      return <button value={book} onClick={() => this.handleClick(book)}> Checkout </button>
+      null
     }
   }
 
@@ -43,6 +57,7 @@ class Carousel extends Component {
         className="book-slide"
         key={book.id}
         >
+        {this.checkoutButton(book)}
         <h3 tabIndex="0">{book.title}</h3>
             isbn: {book.id} <br/>
         <em> by: {book.author} </em>
@@ -54,7 +69,6 @@ class Carousel extends Component {
             {_.take(book.desc, 500)}...
           </div>
         </div>
-          {this.checkoutButton(book)}
       </div>
     )
     return (

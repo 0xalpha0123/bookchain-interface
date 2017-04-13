@@ -1,7 +1,8 @@
-import {Bookchain, accounts } from '../ethereum/EthereumClient'
+import {Bookchain, Bookcoin, accounts} from '../ethereum/EthereumClient'
 import React, { Component } from 'react'
 import logo from '../logo.svg'
 import ContractForm from './ContractForm'
+import Bank from './Bank.js'
 import ParseBooks from './ParseBooks'
 import BookForm from './BookForm.js'
 import Carousel from './Carousel'
@@ -13,28 +14,32 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      bookcoinContract: "",
       bookchainContract: "",
-      books: [
-        {
-          title: "Don Quixote",
-          author: "Miguel de Cervantes",
-          desc: "Test book!",
-          id: "9780679602866",
-          status: true
-        }
-      ]
+      userWallet: "",
+      books: [{
+        title: "This is the template",
+        status: null,
+        id: "test",
+        img_url: "https://bookchainproject.com/_media/images/logo.png",
+        author: "Nick, Robbie, & Jesse"
+    }]
+      
     };
     this.addBook = this.addBook.bind(this);
     this.addBookToBookchain = this.addBookToBookchain.bind(this);
+    this.addContract = this.addContract.bind(this);
+    this.getBooks = this.getBooks.bind(this);
+    this.changeBookStatus = this.changeBookStatus.bind(this);
   }
 
-  addBookToBookchain(title, bookData) {
-    let contract = this.state.bookchainContract
-    Bookchain.at(contract).createBook(title, {from: accounts[0], gas: 1000000})
-    this.addBook(title, bookData)
+
+  addBookToBookchain(title, bookData, bookStatus) {
+    Bookchain.at(localStorage.localBookchain).createBook(title, {from: accounts[0], gas: 1000000})
+    this.addBook(title, bookData, bookStatus)
   }
   
-  addBook(title, book) {
+  addBook(title, book, bookStatus) {
       this.setState({
         books: this.state.books.concat({
           title: book.title,
@@ -42,21 +47,21 @@ class App extends Component {
           id: book.industryIdentifiers[0].identifier,
           desc: book.description,
           img_url: book.imageLinks.smallThumbnail,
-          status: true
+          status: bookStatus
         })
       })
   }
   
-  getBookData = (bookTitle) => {
+  getBookData = (bookTitle, bookStatus) => {
     const url = `https://www.googleapis.com/books/v1/volumes?q=${bookTitle}`;
     request.get(url, true).withCredentials().then((res) => {
       let bookData = _.first(res.body.items).volumeInfo
-      this.addBookToBookchain(bookData.title, bookData)
+      this.addBookToBookchain(bookData.title, bookData, bookStatus)
     }).catch((err) => alert(`Not a good ISBN or You may have hit a problem ${err}`))
   }
   
   getBooks() {
-    let bookList = Bookchain.at(localStorage.contract).getBookshelf()    
+    let bookList = Bookchain.at(localStorage.localBookchain).getBookshelf() 
     this.setState({
       bookchainBooks: {
         titles: bookList[0],
@@ -66,36 +71,75 @@ class App extends Component {
     })
   }
 
-  addContract = (contract) => {
-    localStorage.setItem('contract', contract)
+  addContract = (chainAddress) => {
+    localStorage.setItem('localBookchain', chainAddress)
+    localStorage.setItem('localBookcoin', Bookchain.at(localStorage.localBookchain).bookcoinContract())
+    Bookchain.at(localStorage.localBookchain).registerUser({from: accounts[0]})
+    let money = Bookcoin.at(localStorage.localBookcoin).totalSupply({from: accounts[0]}).toString(10)
+    let vault = Bookcoin.at(localStorage.localBookcoin).balanceOf(localStorage.localBookchain, {from: accounts[0]}).toString(10)
+    let userAccount = Bookcoin.at(localStorage.localBookcoin).balanceOf(accounts[0], {from: accounts[0]}).toString(10)
     this.setState({
-      bookchainContract: localStorage.contract,
-      ownerWallet: accounts[0]
+      bookchainContract: localStorage.localBookchain,
+      bookcoinContract: localStorage.localBookcoin,
+      userWallet: accounts[0],
+      money: money,
+      vault: vault,
+      userAccount: userAccount
     })
     this.forceUpdate()
   }
 
   componentWillMount() {
+    let money = Bookcoin.at(localStorage.localBookcoin).totalSupply({from: accounts[0]}).toString(10)
+    let vault = Bookcoin.at(localStorage.localBookcoin).balanceOf(localStorage.localBookchain, {from: accounts[0]}).toString(10)
+    let userAccount = Bookcoin.at(localStorage.localBookcoin).balanceOf(accounts[0], {from: accounts[0]}).toString(10)
+    
     this.setState({
-      bookchainContract: localStorage.contract,
+      bookchainContract: localStorage.localBookchain,
+      bookcoinContract: localStorage.localBookcoin,
+      userWallet: accounts[0],
+      money: money,
+      vault: vault,
+      userAccount: userAccount
     })
     this.getBooks()
   }
   
   componentDidMount() {
-    ParseBooks(this.state.bookchainBooks, this.getBookData)
+    ParseBooks(this.state.bookchainBooks, this.getBookData)    
   }
-  
-  checkoutBook(id) {
-    Bookchain.at(this.state.bookchainContract).checkoutBook(id)
+
+  checkoutBook(title) {
+    Bookchain.at(localStorage.localBookchain).checkoutBook(title, {from: accounts[0], gas: 1000000})
+  }
+
+  returnBook(title) {
+    Bookchain.at(localStorage.localBookchain).returnBook(title, {from: accounts[0], gas: 1000000})
+  }
+
+  changeBookStatus(updatedBook) {
+    let bookArray = this.state.books
+    bookArray.forEach((book) => {
+      if ( book.title === updatedBook.title ) {
+        if ( updatedBook.status === true ) {
+          book.status = false
+        } else { book.status = true }
+      }
+    })
+    this.forceUpdate()
   }
 
   render() {
     let form = null;
     let wallet = null;
+    let coinForm = null;
     if (this.state.bookchainContract) {
       form = <BookForm getBookData={this.getBookData}/>
-      wallet = <div> Wallet ID = <br/>{this.state.bookchainContract} </div>
+      wallet = <div> 
+                  Wallet ID = {this.state.userWallet} <br/>
+                  Bookchain Address = {this.state.bookchainContract} <br/>
+                  Bookcoin Address = {this.state.bookcoinContract} <br/>
+               </div>
     } else {
       form = <ContractForm addContract={this.addContract} />
     }
@@ -109,11 +153,14 @@ class App extends Component {
         </div>
         <div className="body">
           <div className="slide-show">
-            <Carousel return={this.returnBook} checkout={this.checkoutBook} books={this.state.books} />
+            <Carousel changeBookStatus={this.changeBookStatus} return={this.returnBook} checkout={this.checkoutBook} books={this.state.books} />
             <br/>
             <div className="container">
               <div className="col wallet">{wallet}</div>
               <div className="col">{form}</div>
+              <div className="col">
+                <Bank money={this.state.money} vault={this.state.vault} userAccount={this.state.userAccount}/>
+              </div>
             </div>
           </div>
           <br/>
