@@ -1,16 +1,9 @@
-<<<<<<< HEAD
 import {bookchainAddress, bookChainContract, bookcoinContract, accounts} from '../ethereum/EthereumClient'
 import React, { Component } from 'react'
 import logo from '../logo.svg'
 import ContractForm from './ContractForm'
 import Bank from './Bank.js'
-=======
-import {Bookchain, accounts } from '../ethereum/EthereumClient'
-import React, { Component } from 'react'
-import logo from '../logo.svg'
-import ContractForm from './ContractForm'
 import ParseBooks from './ParseBooks'
->>>>>>> master
 import BookForm from './BookForm.js'
 import Carousel from './Carousel'
 import request from 'superagent'
@@ -21,12 +14,9 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-<<<<<<< HEAD
       bookcoinContract: bookChainContract.bookcoinContract(),
       userWallet: accounts[0],
-=======
       bookchainContract: "",
->>>>>>> master
       books: [
         {
           title: "Don Quixote",
@@ -41,14 +31,7 @@ class App extends Component {
     this.addBookToBookchain = this.addBookToBookchain.bind(this);
   }
 
-<<<<<<< HEAD
-  addBookToBookchain(isbn, bookData) {
-    bookChainContract.createBook(isbn, {from: this.state.userWallet, gas: 1000000})
-    this.addBook(bookData)
-  }
-  
-  addBook(book) {
-=======
+
   addBookToBookchain(title, bookData) {
     let contract = this.state.bookchainContract
     Bookchain.at(contract).createBook(title, {from: accounts[0], gas: 1000000})
@@ -56,7 +39,6 @@ class App extends Component {
   }
   
   addBook(title, book) {
->>>>>>> master
       this.setState({
         books: this.state.books.concat({
           title: book.title,
