@@ -695,6 +695,7 @@ const bookChainContract = ETHEREUM_CLIENT.eth.contract(bookChainContractABI).at(
 const accounts = ETHEREUM_CLIENT.eth.accounts
 
 module.exports  = { 
+  bookchainAddress: bookChainContractAddress,
   bookChainContract: bookChainContract,
   bookcoinContract: bookcoinContract,
   accounts: accounts

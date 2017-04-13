@@ -23,8 +23,9 @@ class Bank extends Component {
   render() {
     return (
       <div> 
-        <p> Total Money Supply: {this.props.money} </p>
-        <p> User Wallet: {this.props.userAccount} </p>
+        <p> Total Money Supply: {this.props.money} bkc</p>
+        <p> Vault: {this.props.vault} bkc</p>
+        <p> User Wallet: {this.props.userAccount} bkc</p>
       </div>
     );
   }

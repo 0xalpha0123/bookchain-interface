@@ -1,4 +1,4 @@
-import {bookChainContract, bookcoinContract, accounts} from '../ethereum/EthereumClient'
+import {bookchainAddress, bookChainContract, bookcoinContract, accounts} from '../ethereum/EthereumClient'
 import React, { Component } from 'react'
 import logo from '../logo.svg'
 import ContractForm from './ContractForm'
@@ -64,7 +64,7 @@ class App extends Component {
 
   getMoney() {
     let money = bookcoinContract.totalSupply({from: this.state.userWallet}).toString(10)
-    let vault = bookcoinContract.balanceOf(this.state.userWallet, {from: bookChainContract}).toString(10)
+    let vault = bookcoinContract.balanceOf(bookchainAddress, {from: bookchainAddress}).toString(10)
     let userAccount = bookcoinContract.balanceOf(this.state.userWallet, {from: this.state.userWallet}).toString(10)
     this.setState({
       money: money,
@@ -72,6 +72,17 @@ class App extends Component {
       userAccount: userAccount
     })
   }
+
+  checkoutBook(id) {
+    bookChainContract.checkoutBook(id, {from: this.state.userWallet, gas: 1000000})
+    this.forceUpdate()
+  }
+
+  returnBook(id) {
+    bookChainContract.returnBook(id, {from: this.state.userWallet, gas: 1000000})
+    this.forceUpdate()
+  }
+
   componentWillMount() {
     this.getMoney()
   //   this.setState({bookchainContract: localStorage.contract})
@@ -96,14 +107,14 @@ class App extends Component {
         </div>
         <div className="body">
           <div className="slide-show">
-            <Carousel books={this.state.books} />
+            <Carousel return={this.returnBook} checkout={this.checkoutBook} books={this.state.books} />
             <br/>
             <div>{wallet}</div>
             {form}
           </div>
           <br/>
           <div className="bank">
-            <Bank money={this.state.money} userAccount={this.state.userAccount}/>
+            <Bank money={this.state.money} vault={this.state.vault} userAccount={this.state.userAccount}/>
           </div>
         </div>
       </div>

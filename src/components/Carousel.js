@@ -5,6 +5,31 @@ import '../css/Carousel.css'
 
 
 class Carousel extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      book: ""
+    }
+    this.checkoutBook = this.checkoutBook.bind(this);
+    this.returnBook = this.returnBook.bind(this);
+  }
+
+  checkoutBook = (book) => {
+    this.props.checkout(book.id)
+  }
+
+  returnBook = (book) => {
+    this.props.return(book.id)
+  }
+
+  checkoutButton(book) {
+    if (book.status === false) {
+      return <button value={book} onClick={() => this.returnBook(book)}> Return </button>
+    } else {
+      return <button value={book} onClick={() => this.checkoutBook(book)}> Checkout </button> 
+    }
+  }
+
   render() {
     const settings = {
       dots: true,
@@ -30,7 +55,7 @@ class Carousel extends Component {
             {_.take(book.desc, 700)}... 
           </div>
         </div>
-        <br/>
+        {this.checkoutButton(book)}
       </div>
     )
     return (
